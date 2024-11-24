@@ -1,0 +1,22 @@
+# default owners
+# anything defined (below) will override
+* @khulnasoft/team-experience @khulnasoft/team-enterprise
+
+# changes to workflows and codeowners
+/.github @khulnasoft/team-experience @khulnasoft/team-engine @khulnasoft/team-enterprise
+
+# the workflow to add latest tag on dockerhub
+# workspace team must own, its part of the workspace-clusters release
+/.github/workflows/dockerhub-release.yml @khulnasoft/team-engine @khulnasoft/team-enterprise
+
+# changes to our base "chunk"
+# leaving workspace team here, for now, to monitor changes
+/base @khulnasoft/team-experience @khulnasoft/team-engine @khulnasoft/team-enterprise
+
+# changes to docker chunk
+# leaving workspace team here, for now, to monitor changes impacting the docker in workspace experience
+/chunks/tool/docker @khulnasoft/team-experience @khulnasoft/team-engine @khulnasoft/team-enterprise
+
+# our definition for combinations
+# leaving workspace team here, for now, to monitor changes to full combo
+dazzle.yaml @khulnasoft/team-experience @khulnasoft/team-engine @khulnasoft/team-enterprise
