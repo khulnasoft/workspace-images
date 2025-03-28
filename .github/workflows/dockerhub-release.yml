@@ -7,10 +7,6 @@ on:
 
 jobs:
   # Sync the 'latest' tag from GAR to Docker Hub
-  #
-  # From your GitHub repo clock Settings. In the left menu, click Environments.
-  # Click New environment, set the name production, and click Configure environment.
-  # Check the "Required reviewers" box and enter at least one user or team name.
   promote-latest:
     if: (github.event_name == 'schedule') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
@@ -19,10 +15,7 @@ jobs:
       contents: "read"
       id-token: "write"
     env:
-      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
-      GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
-      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@khulnasoft-artifacts.iam.gserviceaccount.com
       SKOPEO_VERSION: 1.15.2
 
     steps:
@@ -35,7 +28,6 @@ jobs:
         run: |
           sudo apt-get install python3-pip
           sudo pip3 install yq
-
       - name: 🔆 Setup skopeo
         env:
           SKOPEO_VERSION: ${{env.SKOPEO_VERSION}}
@@ -48,37 +40,14 @@ jobs:
           # Build a fake skopeo script to run a container
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
           #/bin/bash
-
           docker run --rm \
             -v $SKOPEO_AUTH_DIR:/skopeo.auth \
             -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
             quay.io/skopeo/stable:v$SKOPEO_VERSION "\$@"
           EOF
-
           sudo chmod +x /usr/local/bin/skopeo
-
           # don't fail parsing the file while it contains empty creds the first time
           echo "{}" > $SKOPEO_AUTH_DIR/auth
-
-      - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2.1.4
-        with:
-          version: 393.0.0
-
-      - name: 🔐 Authenticate to Google Cloud
-        id: "auth"
-        uses: google-github-actions/auth@v2.1.8
-        with:
-          token_format: "access_token"
-          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
-          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
-
-      - name: ✍🏽 Login to GAR using skopeo
-        env:
-          SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
-        run: |
-          sudo -E skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
-
       - name: ✍🏽 Login to Docker Hub using skopeo
         env:
           docker_user: ${{ secrets.DOCKER_USERNAME }}
@@ -86,7 +55,6 @@ jobs:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
         run: |
           sudo -E skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} ${{ env.DH_IMAGE_REGISTRY }}
-
       - name: 🐳 Sync latest tag of images to Docker Hub
         env:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
@@ -112,7 +80,6 @@ jobs:
           webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
           payload: |
             text: "The release was successful :rocket:"
-
       - name: The release was not successful
         id: slack-failure
         if: needs.promote-latest.result != 'success'
