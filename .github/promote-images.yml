@@ -2,7 +2,7 @@
 # format +%Y-%m-%d-%H-%M-%S e.g. 2022-02-22-10-10-54.
 # Use simple regex for readability. Since we tag all images with year
 # We use a regex rule: Any tag that starts with 'CURRENT_YEAR-CURRENT_MONTH'.
-"europe-docker.pkg.dev/khulnasoft-artifacts/docker-dev":
+"europe-docker.pkg.dev/gitpod-artifacts/docker-dev":
   images-by-tag-regex:
     workspace-base: "TIMESTAMP_TAG"
     workspace-c: "TIMESTAMP_TAG"
