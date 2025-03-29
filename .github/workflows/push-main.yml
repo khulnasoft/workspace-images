@@ -44,7 +44,7 @@ jobs:
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v4
         with:
-          repository: khulnasoft-lab/workspace-images
+          repository: khulnasoft/workspace-images
 
       - name: 🔧 Setup tools
         run: |
@@ -61,7 +61,7 @@ jobs:
         env:
           DAZZLE_VERSION: ${{env.DAZZLE_VERSION}}
         run: |
-          curl -sSL "https://github.com/gitpod-io/dazzle/releases/download/v${DAZZLE_VERSION}/dazzle_${DAZZLE_VERSION}_Linux_x86_64.tar.gz" | sudo tar -xvz -C /usr/local/bin
+          curl -sSL "https://github.com/khulnasoft/dazzle/releases/download/v${DAZZLE_VERSION}/dazzle_${DAZZLE_VERSION}_Linux_x86_64.tar.gz" | sudo tar -xvz -C /usr/local/bin
 
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag

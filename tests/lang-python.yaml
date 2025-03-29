@@ -41,7 +41,7 @@
     - status == 0
     - stdout.indexOf("/workspace/.pyenv_mirror") != -1
 
-# https://github.com/khulnasoft-lab/workspace-images/issues/1000
+# https://github.com/khulnasoft/workspace-images/issues/1000
 - desc: "`pyenv install <ver>` should use $HOME/.pyenv/versions/ for imagebuild env and /workspace/.pyenv_mirror/fakeroot/versions/ for workspace-session env and multi-version shims should work"
   entrypoint: [bash, -c]
   command:

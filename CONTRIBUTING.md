@@ -24,7 +24,7 @@ Here is a list of dependencies and tools:
 
 1. [docker](https://docs.docker.com/get-started/overview/) - to start a local registry server
 1. [buildkitd](https://github.com/moby/buildkit) - to help build the images
-1. [dazzle](https://github.com/gitpod-io/dazzle/) - primary tool used to build docker images
+1. [dazzle](https://github.com/khulnasoft/dazzle/) - primary tool used to build docker images
 1. [registry image](https://docs.docker.com/registry/deploying/) - a local registry server image
 
 ## Building images
@@ -169,7 +169,7 @@ Follow the instructions below to add tests for a chunk:
 
 1. Create a `category-name.yaml` file under the [tests](tests) directory.
 1. Write your tests with proper assertions.
-You can read more on how to write tests in the [dazzle documentation](https://github.com/gitpod-io/dazzle/#testing-layers-and-merged-images)
+You can read more on how to write tests in the [dazzle documentation](https://github.com/khulnasoft/dazzle/#testing-layers-and-merged-images)
 
 Here is a list of best practices you should keep in mind while writing a test:
 

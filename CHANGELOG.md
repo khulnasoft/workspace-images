@@ -183,41 +183,41 @@ A curated, chronologically ordered list of notable changes in [Devpod's default 
 
 ## 2020-06-03
 
-- Bump Node.js version following a [security alert](https://twitter.com/liran_tal/status/1267519052731289600): [khulnasoft-lab/workspace-images#243](https://github.com/khulnasoft-lab/workspace-images/pull/243)
+- Bump Node.js version following a [security alert](https://twitter.com/liran_tal/status/1267519052731289600): [khulnasoft/workspace-images#243](https://github.com/khulnasoft/workspace-images/pull/243)
 
 ## 2020-06-02
 
-- Upgrade all Go tools to get the latest `gopls`, and remove broken `golangci-lint` [khulnasoft-lab/workspace-images#237](https://github.com/khulnasoft-lab/workspace-images/pull/237)
-- Make Python 3 the default `python` version (use `pyenv local 2.7.17` to go back to Python 2) [khulnasoft-lab/workspace-images#214](https://github.com/khulnasoft-lab/workspace-images/pull/214)
+- Upgrade all Go tools to get the latest `gopls`, and remove broken `golangci-lint` [khulnasoft/workspace-images#237](https://github.com/khulnasoft/workspace-images/pull/237)
+- Make Python 3 the default `python` version (use `pyenv local 2.7.17` to go back to Python 2) [khulnasoft/workspace-images#214](https://github.com/khulnasoft/workspace-images/pull/214)
 
 ## 2020-05-12
 
-- Downgrade Ruby `2.7.1` → `2.6.6` (because Solargraph doesn't support latest Bundler `2.1.4` yet) [e9281a20](https://github.com/khulnasoft-lab/workspace-images/commit/e9281a207c4c6b4c7df2e91e9ec81f36ed0652ae)
+- Downgrade Ruby `2.7.1` → `2.6.6` (because Solargraph doesn't support latest Bundler `2.1.4` yet) [e9281a20](https://github.com/khulnasoft/workspace-images/commit/e9281a207c4c6b4c7df2e91e9ec81f36ed0652ae)
 
 ## 2020-05-08
 
-- Upgrade to Rust `1.43.1` [khulnasoft-lab/workspace-images#230](https://github.com/khulnasoft-lab/workspace-images/pull/230)
-- Fix the persistence of Ruby gems in `/workspace/.rvm` with a custom `.rvmrc` [khulnasoft-lab/workspace-images#223](https://github.com/khulnasoft-lab/workspace-images/pull/223)
-- Upgrade RVM's Ruby from `2.5` → `2.5.8` and `2.6` → `2.7.1` [khulnasoft-lab/workspace-images#213](https://github.com/khulnasoft-lab/workspace-images/pull/213)
+- Upgrade to Rust `1.43.1` [khulnasoft/workspace-images#230](https://github.com/khulnasoft/workspace-images/pull/230)
+- Fix the persistence of Ruby gems in `/workspace/.rvm` with a custom `.rvmrc` [khulnasoft/workspace-images#223](https://github.com/khulnasoft/workspace-images/pull/223)
+- Upgrade RVM's Ruby from `2.5` → `2.5.8` and `2.6` → `2.7.1` [khulnasoft/workspace-images#213](https://github.com/khulnasoft/workspace-images/pull/213)
 
 ## 2020-05-02
 
-- Fix Ubuntu 20.04 based `khulnasoft/workspace-dotnet` and `khulnasoft/workspace-dotnet-vnc` images by installing .NET Core SDK 3.1 binaries [khulnasoft-lab/workspace-images#218](https://github.com/khulnasoft-lab/workspace-images/pull/218)
+- Fix Ubuntu 20.04 based `khulnasoft/workspace-dotnet` and `khulnasoft/workspace-dotnet-vnc` images by installing .NET Core SDK 3.1 binaries [khulnasoft/workspace-images#218](https://github.com/khulnasoft/workspace-images/pull/218)
 
 ## 2020-04-29
 
-- Best practice: Don't stay as `USER root` in `khulnasoft/workspace-full-vnc` [khulnasoft-lab/workspace-images#215](https://github.com/khulnasoft-lab/workspace-images/pull/215)
-- Add bash auto-completion for `cargo` [khulnasoft-lab/workspace-images#216](https://github.com/khulnasoft-lab/workspace-images/pull/216)
+- Best practice: Don't stay as `USER root` in `khulnasoft/workspace-full-vnc` [khulnasoft/workspace-images#215](https://github.com/khulnasoft/workspace-images/pull/215)
+- Add bash auto-completion for `cargo` [khulnasoft/workspace-images#216](https://github.com/khulnasoft/workspace-images/pull/216)
 
 ## 2020-04-21
 
-- Upgrade Pyenv's Python from `3.7.7` → `3.8.2` [khulnasoft-lab/workspace-images#212](https://github.com/khulnasoft-lab/workspace-images/pull/212)
+- Upgrade Pyenv's Python from `3.7.7` → `3.8.2` [khulnasoft/workspace-images#212](https://github.com/khulnasoft/workspace-images/pull/212)
 - Drop support of .NET `2.2`, because it reached [end-of-life](https://dotnet.microsoft.com/platform/support/policy/dotnet-core) on 2019-12-23
 
 ## 2020-04-17
 
-- Fix PostgreSQL image and pin to PostgreSQL version `12` [khulnasoft-lab/workspace-images#209](https://github.com/khulnasoft-lab/workspace-images/pull/209)
-- Upgrade Rust `1.41.1` → `1.42.0` [khulnasoft-lab/workspace-images#207](https://github.com/khulnasoft-lab/workspace-images/pull/207)
+- Fix PostgreSQL image and pin to PostgreSQL version `12` [khulnasoft/workspace-images#209](https://github.com/khulnasoft/workspace-images/pull/209)
+- Upgrade Rust `1.41.1` → `1.42.0` [khulnasoft/workspace-images#207](https://github.com/khulnasoft/workspace-images/pull/207)
 - Fix MySQL image by updating mysql.cnf for MySQL `8`, fixes [gitpod-io/gitpod#1399](https://github.com/khulnasoft/devpod/issues/1399)
 
 ## 2020-04-15
@@ -227,11 +227,11 @@ A curated, chronologically ordered list of notable changes in [Devpod's default 
 
 ## 2020-04-06
 
-- Make noVNC (virtual desktop) automatically reconnect if the connection is dropped, and enable noVNC toolbar [khulnasoft-lab/workspace-images#170](https://github.com/khulnasoft-lab/workspace-images/pull/170)
+- Make noVNC (virtual desktop) automatically reconnect if the connection is dropped, and enable noVNC toolbar [khulnasoft/workspace-images#170](https://github.com/khulnasoft/workspace-images/pull/170)
 
 ## 2020-03-30
 
-- Upgrade Node.js from `v10` → `v12 LTS` (to pin a specific version, see [this workaround](https://github.com/khulnasoft-lab/workspace-images/pull/178#issuecomment-602465333))
+- Upgrade Node.js from `v10` → `v12 LTS` (to pin a specific version, see [this workaround](https://github.com/khulnasoft/workspace-images/pull/178#issuecomment-602465333))
 
 ---
 

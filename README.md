@@ -1,7 +1,7 @@
 # Workspace Images
 
-[![Devpod ready-to-code](https://img.shields.io/badge/Devpod-ready--to--code-908a85?logo=devpod)](https://devpod.khulnasoft.com/#https://github.com/khulnasoft-lab/workspace-images)
-[![Build from Main](https://github.com/khulnasoft-lab/workspace-images/actions/workflows/push-main.yml/badge.svg)](https://github.com/khulnasoft-lab/workspace-images/actions/workflows/push-main.yml)
+[![Devpod ready-to-code](https://img.shields.io/badge/Devpod-ready--to--code-908a85?logo=devpod)](https://devpod.khulnasoft.com/#https://github.com/khulnasoft/workspace-images)
+[![Build from Main](https://github.com/khulnasoft/workspace-images/actions/workflows/push-main.yml/badge.svg)](https://github.com/khulnasoft/workspace-images/actions/workflows/push-main.yml)
 
 Ready-to-use Docker images for [devpod.khulnasoft.com](https://www.devpod.khulnasoft.com) workspaces.
 All images are available on [Khulnasoft's Docker Hub page](https://hub.docker.com/u/khulnasoft).
@@ -10,7 +10,7 @@ For an example of how to use these images, please take a look at the [documentat
 
 ## 📢 Announcements
 
-We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and build with GitHub Actions.
+We upgraded to support [dazzle v2](https://github.com/khulnasoft/dazzle) and build with GitHub Actions.
 
 ## Summary
 
@@ -21,13 +21,13 @@ We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and buil
 ## Images
 
 By default, Devpod uses a standard Docker Image called
-[`workspace-full`](https://github.com/khulnasoft-lab/workspace-images/blob/HEAD/dazzle.yaml#L23) as the foundation for workspaces.
+[`workspace-full`](https://github.com/khulnasoft/workspace-images/blob/HEAD/dazzle.yaml#L23) as the foundation for workspaces.
 
 Workspaces started based on this default image come pre-installed with
 Docker, Nix, Go, Java, Node.js, C/C++, Python, Ruby, Rust & PHP as well as tools such as Homebrew, Tailscale, Nginx & several more.
 
 If this image does not include the tools you need for your repository, we recommend you start with
-[`workspace-base`](https://github.com/khulnasoft-lab/workspace-images/blob/HEAD/dazzle.yaml#L3) and customize it according to your needs.
+[`workspace-base`](https://github.com/khulnasoft/workspace-images/blob/HEAD/dazzle.yaml#L3) and customize it according to your needs.
 You can refer to this [document to setup a custom docker image](https://www.devpod.khulnasoft.com/docs/configure/workspaces/workspace-image).
 
 ### 📷 Images we'll maintain
@@ -106,10 +106,10 @@ For images dedicated to Java, Node, Python and Ruby, their lifecycle generally w
 
 You can follow the detailed guide on how to contribute [here](CONTRIBUTING.md).
 
-[![Open in Devpod](https://devpod.khulnasoft.com/button/open-in-gitpod.svg)](https://devpod.khulnasoft.com/#https://github.com/khulnasoft-lab/workspace-images)
+[![Open in Devpod](https://devpod.khulnasoft.com/button/open-in-gitpod.svg)](https://devpod.khulnasoft.com/#https://github.com/khulnasoft/workspace-images)
 
 ## Where to follow new updates
 
 - **Announcements**: Significant changes and breaking updates are announced through the [CHANGELOG.md](/CHANGELOG.md) file with details.
-- **Recently Merged Changes**: For checking new features or updates staged for next deployment that don't warrant everyone's attention, browse through the [merged pull requests](https://github.com/khulnasoft-lab/workspace-images/pulls?q=is%3Apr+is%3Amerged).
-- **Image Updates**: Every Monday, [a GitHub action](https://github.com/khulnasoft-lab/workspace-images/actions/workflows/dockerhub-release.yml?query=is%3Asuccess) automatically builds and updates the images based on the `main` branch. Once built, these images are made available on [Khulnasoft's Docker Hub](https://hub.docker.com/u/khulnasoft).
+- **Recently Merged Changes**: For checking new features or updates staged for next deployment that don't warrant everyone's attention, browse through the [merged pull requests](https://github.com/khulnasoft/workspace-images/pulls?q=is%3Apr+is%3Amerged).
+- **Image Updates**: Every Monday, [a GitHub action](https://github.com/khulnasoft/workspace-images/actions/workflows/dockerhub-release.yml?query=is%3Asuccess) automatically builds and updates the images based on the `main` branch. Once built, these images are made available on [Khulnasoft's Docker Hub](https://hub.docker.com/u/khulnasoft).

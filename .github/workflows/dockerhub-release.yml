@@ -22,7 +22,7 @@ jobs:
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v4
         with:
-          repository: khulnasoft-lab/workspace-images
+          repository: khulnasoft/workspace-images
 
       - name: 🔧 Setup tools
         run: |
