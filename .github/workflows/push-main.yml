@@ -10,7 +10,6 @@ jobs:
     uses: gitpod-io/gce-github-runner/.github/workflows/create-vm.yml@main
     secrets:
       runner_token: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_TOKEN }}
-      gcp_credentials: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_GCP_CREDENTIALS }}
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && github.run_id || github.sha }}-create-runner
       cancel-in-progress: false
@@ -32,10 +31,8 @@ jobs:
       contents: "read"
       id-token: "write"
     env:
-      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
-      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@khulnasoft-artifacts.iam.gserviceaccount.com
       DAZZLE_VERSION: 0.1.17
       BUILDKIT_VERSION: 0.12.3
       SKOPEO_VERSION: 1.15.2
@@ -52,22 +49,18 @@ jobs:
           curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.0/shfmt_v3.5.0_linux_amd64 -o shfmt
           sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
           sudo pip3 install pre-commit
-
       - name: 🤓 Run pre-commit
         run: |
           pre-commit run --all-files
-
       - name: 🔆 Install dazzle
         env:
           DAZZLE_VERSION: ${{env.DAZZLE_VERSION}}
         run: |
           curl -sSL "https://github.com/khulnasoft/dazzle/releases/download/v${DAZZLE_VERSION}/dazzle_${DAZZLE_VERSION}_Linux_x86_64.tar.gz" | sudo tar -xvz -C /usr/local/bin
-
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag
         run: |
           echo "TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
-
       - name: 🔆 Install skopeo
         env:
           SKOPEO_VERSION: ${{env.SKOPEO_VERSION}}
@@ -81,29 +74,23 @@ jobs:
           # Any step using skopeo needs SKOPEO_SYNC_FILES env var
           SKOPEO_SYNC_FILES=$(mktemp -d)
           echo "SKOPEO_SYNC_FILES=${SKOPEO_SYNC_FILES}" >> $GITHUB_ENV
-
           # limit what we push as time stamped images to images built in the current year and month only
           current_year=$(date +%Y)
           current_month=$(date +%m)
           sed -i "s/TIMESTAMP_TAG/$TIMESTAMP_TAG/g" "${GITHUB_WORKSPACE}/.github/promote-images.yml"
-
           cp "${GITHUB_WORKSPACE}/.github/promote-images.yml" "${SKOPEO_SYNC_FILES}"
           # Build a fake skopeo script to run a container
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
           #/bin/bash
-
           docker run --rm \
             -v "${SKOPEO_AUTH_DIR}":/skopeo.auth \
             -v "${SKOPEO_SYNC_FILES}":/.github \
             -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
             quay.io/skopeo/stable:v"${SKOPEO_VERSION}" "\$@"
           EOF
-
           sudo chmod +x /usr/local/bin/skopeo
-
           # don't fail parsing the file while it contains empty creds the first time
           echo "{}" > $SKOPEO_AUTH_DIR/auth
-
       - name: 🏗️ Setup buildkit
         env:
           BUILDKIT_VERSION: ${{env.BUILDKIT_VERSION}}
@@ -112,74 +99,7 @@ jobs:
           sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
-
-      - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2.1.4
-        with:
-          version: 393.0.0
-
-      - name: 🔐 Authenticate to Google Cloud
-        id: "auth"
-        uses: google-github-actions/auth@v2.1.8
-        with:
-          token_format: "access_token"
-          access_token_lifetime: "43200s"
-          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
-          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
-
-      - name: ✍🏽 Login to GAR using skopeo
-        env:
-          SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
-          GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
-          SKOPEO_SYNC_FILES: ${env.SKOPEO_SYNC_FILES}
-        run: |
-          sudo -E skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} $GAR_IMAGE_REGISTRY
-
-      - name: ✍🏽 Login to GAR using docker cli
-        env:
-          GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
-        run: |
-          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} $GAR_IMAGE_REGISTRY
-
-      - name: 🔨 Dazzle build
-        env:
-          GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
-        run: |
-          dazzle build "${GAR_IMAGE_REGISTRY}/khulnasoft-artifacts/docker-dev/workspace-base-images" --chunked-without-hash
-          dazzle build "${GAR_IMAGE_REGISTRY}/khulnasoft-artifacts/docker-dev/workspace-base-images"
-
-      - name: 🖇️ Dazzle combine
-        env:
-          GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
-        run: |
-          dazzle combine "${GAR_IMAGE_REGISTRY}/khulnasoft-artifacts/docker-dev/workspace-base-images" --all
-
-      - name: 🔧 Setup copy tools
-        run: |
-          # this installs yq 3
-          sudo pip3 install yq
-
-      - name: 📋 Copy images with tag in the Artifact Registry
-        env:
-          SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
-          GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
-          TIMESTAMP_TAG: ${{env.TIMESTAMP_TAG}}
-          SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
-        run: |
-          set -euo pipefail
-
-          IFS=$'\n' read -r -d '' -a IMAGE_TAGS_ARR < <(yq -r '.sync.images."workspace-base-images"[]' ./.github/sync-containers.yml && printf '\0')
-          UPLOADS_STRING=""
-          for IMAGE_TAG in "${IMAGE_TAGS_ARR[@]}"; do
-              UPLOADS_STRING+=$(printf "./.github/workflows/push-main/upload_image.sh %s%s" ${IMAGE_TAG}'\n')
-          done
-          # remove the trailing newline
-          UPLOADS_STRING="${UPLOADS_STRING::-2}"
-          echo -e "${UPLOADS_STRING}" | xargs -I CMD -P 10 -n 1 \
-          env SKOPEO_AUTH_DIR="${SKOPEO_AUTH_DIR}" GAR_IMAGE_REGISTRY="${GAR_IMAGE_REGISTRY}" TIMESTAMP_TAG="${TIMESTAMP_TAG}" SKOPEO_SYNC_FILES="${SKOPEO_SYNC_FILES}" \
-          bash -c CMD --
-
-      - name: ✍🏽 Login to Docker Hub using skopeo
+      - name: 🔐 Login to Docker Hub using skopeo
         env:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
@@ -187,7 +107,6 @@ jobs:
           SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
         run: |
           sudo -E skopeo login -u "${DOCKER_USERNAME}" --password="${DOCKER_TOKEN}" "${DH_IMAGE_REGISTRY}"
-
       - name: 🐳 Sync images with specific tags to Docker Hub
         env:
           DH_IMAGE_REGISTRY: ${{env.DH_IMAGE_REGISTRY}}
